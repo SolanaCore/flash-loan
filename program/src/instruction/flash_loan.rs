@@ -19,7 +19,7 @@ pub enum FlashLoanInstruction {
     ///
     /// Creates a new pool with a vault and LP token mint.
     #[account(0, signer, name = "user", desc = "User initializing the pool")]
-    #[account(1, writable, name = "pool", desc = "Pool state account (PDA)")]
+    #[account(1, writable, name = "pool", desc = "Pool state account (PDA) ")]
     #[account(2, name = "token_mint", desc = "Token mint to be used in the pool")]
     #[account(3, writable, name = "vault", desc = "Vault token account (PDA)")]
     #[account(4, writable, name = "lp_mint_account", desc = "LP token mint account (PDA)")]

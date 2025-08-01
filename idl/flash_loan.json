@@ -1,0 +1,531 @@
+{
+  "version": "0.0.1",
+  "name": "flash_loan",
+  "instructions": [
+    {
+      "name": "InitPool",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User initializing the pool"
+          ]
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Pool state account (PDA) "
+          ]
+        },
+        {
+          "name": "tokenMint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Token mint to be used in the pool"
+          ]
+        },
+        {
+          "name": "vault",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Vault token account (PDA)"
+          ]
+        },
+        {
+          "name": "lpMintAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "LP token mint account (PDA)"
+          ]
+        },
+        {
+          "name": "userLpAta",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User's LP token associated token account"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL Token program"
+          ]
+        },
+        {
+          "name": "clock",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Clock sysvar for timestamps"
+          ]
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Rent sysvar for rent exemption"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "initialAmount",
+          "type": "u64"
+        },
+        {
+          "name": "feesBps",
+          "type": "u16"
+        },
+        {
+          "name": "bump",
+          "type": "u8"
+        },
+        {
+          "name": "mint",
+          "type": "publicKey"
+        },
+        {
+          "name": "lpMintBump",
+          "type": "u8"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 0
+      }
+    },
+    {
+      "name": "LiquidatePool",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User initiating liquidation"
+          ]
+        },
+        {
+          "name": "userAta",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User's token account to deposit"
+          ]
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Pool state account (PDA)"
+          ]
+        },
+        {
+          "name": "vault",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Vault token account (PDA)"
+          ]
+        },
+        {
+          "name": "lpMint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "LP token mint"
+          ]
+        },
+        {
+          "name": "lpAta",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "User's LP token account"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL Token program"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "poolId",
+          "type": "u8"
+        },
+        {
+          "name": "tokenAmount",
+          "type": "u64"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 1
+      }
+    },
+    {
+      "name": "DeLiquidatePool",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User initiating de-liquidation"
+          ]
+        },
+        {
+          "name": "userAta",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User's token account to deposit"
+          ]
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Pool state account (PDA)"
+          ]
+        },
+        {
+          "name": "vault",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Vault token account (PDA)"
+          ]
+        },
+        {
+          "name": "lpMint",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "LP token mint"
+          ]
+        },
+        {
+          "name": "lpAta",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "User's LP token account"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL Token program"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "poolId",
+          "type": "u8"
+        },
+        {
+          "name": "lpAmount",
+          "type": "u64"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 2
+      }
+    },
+    {
+      "name": "Borrow",
+      "accounts": [
+        {
+          "name": "borrower",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User borrowing tokens"
+          ]
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Pool state account (PDA)"
+          ]
+        },
+        {
+          "name": "vault",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Pool's vault holding tokens"
+          ]
+        },
+        {
+          "name": "borrowerTokenAccount",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Borrower's token account to receive funds"
+          ]
+        },
+        {
+          "name": "instructionSysvar",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Instruction Sysvar for CPI introspection"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL Token program"
+          ]
+        },
+        {
+          "name": "clock",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Clock sysvar for timestamps"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "poolId",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "mint",
+          "type": "publicKey"
+        },
+        {
+          "name": "bump",
+          "type": "u8"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 3
+      }
+    },
+    {
+      "name": "Repay",
+      "accounts": [
+        {
+          "name": "borrower",
+          "isMut": false,
+          "isSigner": true,
+          "docs": [
+            "User repaying the loan"
+          ]
+        },
+        {
+          "name": "pool",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Pool state account (PDA)"
+          ]
+        },
+        {
+          "name": "source",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "User's token account sending repayment"
+          ]
+        },
+        {
+          "name": "vault",
+          "isMut": true,
+          "isSigner": false,
+          "docs": [
+            "Vault receiving the repayment"
+          ]
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "SPL Token program"
+          ]
+        },
+        {
+          "name": "clock",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "Clock sysvar for timestamps"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "poolId",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 4
+      }
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Pool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tokenMint",
+            "type": "publicKey"
+          },
+          {
+            "name": "lpMint",
+            "type": "publicKey"
+          },
+          {
+            "name": "vault",
+            "type": "publicKey"
+          },
+          {
+            "name": "poolId",
+            "type": "u8"
+          },
+          {
+            "name": "totalLiquidity",
+            "type": "u64"
+          },
+          {
+            "name": "totalLpSupply",
+            "type": "u64"
+          },
+          {
+            "name": "feesBps",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "lpMintBump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 0,
+      "name": "InvalidAuthority",
+      "msg": "Invalid authority provided."
+    },
+    {
+      "code": 1,
+      "name": "InsufficientLiquidity",
+      "msg": "Insufficient liquidity in pool."
+    },
+    {
+      "code": 2,
+      "name": "InvalidRepaymentAmount",
+      "msg": "Repayment amount is incorrect."
+    },
+    {
+      "code": 3,
+      "name": "LoanMustBeRepaidImmediately",
+      "msg": "Loan must be repaid in the same transaction."
+    },
+    {
+      "code": 4,
+      "name": "FlashLoanAlreadyTaken",
+      "msg": "Flash loan has already been taken."
+    },
+    {
+      "code": 5,
+      "name": "InvalidTokenMint",
+      "msg": "Token mismatch detected."
+    },
+    {
+      "code": 6,
+      "name": "MathError",
+      "msg": "Arithmetic overflow or underflow occurred."
+    },
+    {
+      "code": 7,
+      "name": "UnauthorizedAccess",
+      "msg": "Unauthorized account access."
+    },
+    {
+      "code": 8,
+      "name": "InsufficientFunds",
+      "msg": "Insufficient funds in the account"
+    },
+    {
+      "code": 9,
+      "name": "InvalidAccountData",
+      "msg": "Invalid ATA passed who's owner isn't the specified borrower"
+    },
+    {
+      "code": 10,
+      "name": "InvalidPoolId",
+      "msg": "Invalid pool id passed in the instruction as it doesnt match with the pool's pda pool_id"
+    },
+    {
+      "code": 11,
+      "name": "InvalidAmount",
+      "msg": "Amount can't be zero"
+    },
+    {
+      "code": 12,
+      "name": "MissingRequiredSignature",
+      "msg": "The passed account is_signer flag is set to false"
+    },
+    {
+      "code": 13,
+      "name": "InvalidInstructionData",
+      "msg": "Invalid instruction data provided"
+    }
+  ],
+  "metadata": {
+    "origin": "shank",
+    "address": "AnF4GwUrfauDaYMmQg3ScB4FSxMp3Wz5WpYdWpjcM64w"
+  }
+}

@@ -28,7 +28,6 @@ pub enum FlashLoanInstruction {
     #[account(7, name = "clock", desc = "Clock sysvar for timestamps")]
     #[account(8, name = "rent", desc = "Rent sysvar for rent exemption")]
     InitPool {
-        pool_id: u8,
         initial_amount: u64,
         fees_bps: u16,
         bump: u8,
@@ -41,11 +40,11 @@ pub enum FlashLoanInstruction {
     /// User deposits tokens and receives LP tokens in return.
     #[account(0, signer, name = "user", desc = "User initiating liquidation")]
     #[account(1, writable, name = "user_ata", desc = "User's token account to deposit")]
-    #[account(1, writable, name = "pool", desc = "Pool state account (PDA)")]
-    #[account(2, writable, name = "vault", desc = "Vault token account (PDA)")]
-    #[account(3, name = "lp_mint", desc = "LP token mint")]
-    #[account(4, name = "lp_ata", desc = "User's LP token account")]
-    #[account(5, name = "token_program", desc = "SPL Token program")]
+    #[account(2, writable, name = "pool", desc = "Pool state account (PDA)")]
+    #[account(3, writable, name = "vault", desc = "Vault token account (PDA)")]
+    #[account(4, name = "lp_mint", desc = "LP token mint")]
+    #[account(5, name = "lp_ata", desc = "User's LP token account")]
+    #[account(6, name = "token_program", desc = "SPL Token program")]
     LiquidatePool {
         pool_id: u8,
         token_amount: u64,
@@ -56,11 +55,11 @@ pub enum FlashLoanInstruction {
     /// User redeems LP tokens to get original tokens back.
     #[account(0, signer, name = "user", desc = "User initiating de-liquidation")]
     #[account(1, writable, name = "user_ata", desc = "User's token account to deposit")]
-    #[account(1, writable, name = "pool", desc = "Pool state account (PDA)")]
-    #[account(2, writable, name = "vault", desc = "Vault token account (PDA)")]
-    #[account(3, name = "lp_mint", desc = "LP token mint")]
-    #[account(4, name = "lp_ata", desc = "User's LP token account")]
-    #[account(5, name = "token_program", desc = "SPL Token program")]
+    #[account(2, writable, name = "pool", desc = "Pool state account (PDA)")]
+    #[account(3, writable, name = "vault", desc = "Vault token account (PDA)")]
+    #[account(4, name = "lp_mint", desc = "LP token mint")]
+    #[account(5, name = "lp_ata", desc = "User's LP token account")]
+    #[account(6, name = "token_program", desc = "SPL Token program")]
     DeLiquidatePool {
         pool_id: u8,
         lp_amount: u64,
@@ -91,7 +90,7 @@ pub enum FlashLoanInstruction {
     #[account(2, writable, name = "source", desc = "User's token account sending repayment")]
     #[account(3, writable, name = "vault", desc = "Vault receiving the repayment")]
     #[account(4, name = "token_program", desc = "SPL Token program")]
-    #[account(6, name = "clock", desc = "Clock sysvar for timestamps")]
+    #[account(5, name = "clock", desc = "Clock sysvar for timestamps")]
     Repay {
         pool_id: u8,     // Ensures repayment targets the correct pool
         amount: u64,     // Amount being repaid

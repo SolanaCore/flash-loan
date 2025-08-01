@@ -19,14 +19,19 @@ pub fn process(
     instruction: FlashLoanInstruction,
 ) -> ProgramResult {
     match instruction {
+        // pool_id: u8,
+        // initial_amount: u64,
+        // fees_bps: u16,
+        // bump: u8,
+        // mint: Pubkey,
+        // lp_mint_bump: u8,
         FlashLoanInstruction::InitPool {
-            pool_id,
             initial_amount,
             fees_bps,
+            bump,
             mint,
             lp_mint_bump,
-            bump
-        } => init_pool(program_id, accounts, pool_id, initial_amount, fees_bps, mint, lp_mint_bump,bump),
+        } => init_pool(program_id, accounts, initial_amount, fees_bps, mint, lp_mint_bump, bump),
 
         FlashLoanInstruction::Borrow { pool_id, amount, mint, bump} => {
             borrow(program_id, accounts, pool_id, amount, &mint, bump)

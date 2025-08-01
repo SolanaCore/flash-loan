@@ -16,7 +16,7 @@ use borsh::{BorshSerialize, BorshDeserialize, from_slice, to_vec};
 ///Grouping fixed-size types of similar byte lengths together avoids padding.
 #[repr(C)]
 #[derive(Clone, Debug, Default, PartialEq, ShankAccount, BorshSerialize, BorshDeserialize)]
-pub struct Pool{
+pub struct Pool {
     pub token_mint: Pubkey,
     pub lp_mint: Pubkey,
     

@@ -78,13 +78,13 @@ pub fn liquidate_pool(
     let seeds = &[b"vault", pool_id_bytes.as_ref(), &[pool_data.lp_mint_bump]];
     let signer_seeds: &[&[&[u8]]] = &[&seeds[..]];
 
-    mint_tokens(
+    let _ = mint_tokens(
         lp_mint.clone(),
         lp_ata.clone(),
         pool.clone(),
         token_program.clone(),
         lp_to_mint,
-        signer_seeds-
+        signer_seeds
     )?;
 
     Ok(())

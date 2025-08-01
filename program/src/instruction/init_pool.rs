@@ -12,7 +12,7 @@ use solana_program::{
 use borsh::BorshDeserialize;
 use crate::{
     state::Pool as PoolState,
-    utils::{transfer_tokens, create_mint},
+    utils::{transfer_tokens, create_mint, mint_tokens},
     error::FlashLoanError,
 };
 use borsh::BorshSerialize;
@@ -23,8 +23,8 @@ pub fn init_pool(
     initial_amount: u64,
     fees_bps: u16,
     mint: Pubkey,
-    pool_bump: u8,
     lp_mint_bump: u8,
+    bump: u8,
 ) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
 
@@ -60,6 +60,11 @@ pub fn init_pool(
         initial_amount,
         None,
     )?;
+        //pool id is also the open_time
+    // so how to get current time
+    let clock = solana_program::sysvar::clock::Clock::from_account_info(clock_sysvar)?;
+    let open_time = clock.unix_timestamp as u8;
+    let pool_id = open_time; // Use open_time as pool_id
 
     let pool_id_bytes = &pool_id.to_le_bytes();
     let signer_seeds: &[&[u8]] = &[b"lp_mint", pool_id_bytes, &[lp_mint_bump]];
@@ -74,10 +79,7 @@ pub fn init_pool(
         token_program.clone(),
         signer_seeds_ref,
     )?;
-    //pool id is also the open_time
-    // so how to get current time
-    let clock = solana_program::sysvar::clock::Clock::from_account_info(clock_sysvar)?;
-    let open_time = clock.unix_timestamp as u8;
+
 
     // Initialize pool state
     let pool_data = PoolState {
@@ -87,7 +89,7 @@ pub fn init_pool(
         total_lp_supply: initial_amount,
         fees_bps: fees_bps.try_into().unwrap(),
         token_mint: *mint.key,
-        bump: pool_bump,
+        bump: bump,
         lp_mint_bump,
         lp_mint: *lp_mint_account.key,
     };
